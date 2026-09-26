@@ -233,6 +233,76 @@
 
 // else {
 //     console.log("You are not ready for any type of exams")
-// }
+// } 
 
 //   Q14.
+
+// let physics = 98;
+// let chemistry = 89;
+// let Mathematics = 97;
+// let totalMarks =  physics + chemistry + Mathematics;
+// let average = totalMarks/3 ;
+// if (average>=75 && average<=100) {
+//     console.log("Distinction");
+// }
+// if (average>=60 && average<=75) {
+//     console.log("First Division");
+// }
+// if (average>=50 && average<=60) {
+//     console.log("Second Division");
+// }
+// if (average>=40 && average<=50) {
+//     console.log("Pass");
+// }
+// else {
+//     console.log("Fail")
+// }
+
+// Method-2
+
+// function subjects(maths , physics , chemistry){
+//     let totalMarks = maths + physics + chemistry;
+//     let average = totalMarks/3;
+//     console.log(average);
+//     if (average>=75 && average<=100) {
+//     console.log("Distinction");
+// }
+// if (average>=60 && average<=75) {
+//     console.log("First Division");
+// }
+// if (average>=50 && average<=60) {
+//     console.log("Second Division");
+// }
+// if (average>=40 && average<=50) {
+//     console.log("Pass");
+// }
+// }
+// subjects(98,89,96);
+
+
+//   Q15.
+
+// function electricBill(usedUnits){
+//     let totalBill1 = usedUnits * 5;
+//     if(totalBill1>=0 && totalBill1<=100){
+//         console.log("TotalBill: ",totalBill1 + "units");
+//     }
+//     let totalBill2 = usedUnits * 7;
+//      if(totalBill1>=101 && totalBill1<=200){
+//         console.log("TotalBill: ",totalBill2 + "units");
+//     }
+//     let totalBill3 = usedUnits * 10;
+//      if(totalBill1>=200){
+//         console.log("TotalBill: " ,totalBill3 + "units");
+//     }
+
+// }
+// electricBill(10);
+
+//   Q16.
+
+//   Q17.
+
+// function employee(salary , yearsOfExperience){
+//            let
+// }
