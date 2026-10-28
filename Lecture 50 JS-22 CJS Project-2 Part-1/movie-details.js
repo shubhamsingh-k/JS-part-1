@@ -27,7 +27,7 @@ async function searchMovie(imdbID){
     `;
 
      try {
-        let response = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=58360e61&i=${encodeURIComponent(imdbID)}&plot=full`);
+        let response = await fetch(`https://www.omdbapi.com/?apikey=58360e61&i=${encodeURIComponent(imdbID)}&plot=full`);
         let data = await response.json();
 
         if (data.Response === "True") {
