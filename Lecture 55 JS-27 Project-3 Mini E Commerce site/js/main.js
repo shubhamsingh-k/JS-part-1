@@ -1,13 +1,11 @@
 const API = "https://dummyjson.com/products?limit=0";
 const CATEGORY_API = "https://dummyjson.com/products/categories";
-
 const productsContainer = document.querySelector("#products-container");
 const categoryFilters = document.querySelector("#category-filters");
 const searchInput = document.querySelector("#search-input");
-const wishlistCount = document.querySelector("#wishlist-count")
-const cartCount = document.querySelector("cart-count");
+const wishlistCount = document.querySelector("#wishlist-count");
+const cartCount = document.querySelector("#cart-count");
 const cartContainer = document.querySelector("#cart-container");
-
 
 let allCategories = [];
 
@@ -17,6 +15,7 @@ async function fetchProducts(url) {
   const data = await response.json();
   // allProducts = data.products
   // console.log(allProducts);
+  // findAllCategories()
   renderProducts(data.products);
 }
 
@@ -43,20 +42,20 @@ async function loadProductPage() {
   const response = await fetch(url);
   const data = await response.json();
 
-  if(data.message){
+  if (data.message) {
     productDetailContainer.innerHTML = "Failed to load product details.";
     return;
   }
 
-  const{ thumbnail, category, price, rating, reviews, title, description } = data;
-
+  const { thumbnail, category, price, rating, reviews, title, description } =
+    data;
 
   const div = `<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
-
-   <div class="bg-white border border-slate-200 rounded-lg p-8 flex items-center justify-center min-h-[350px] md:min-h-[440px]">
+        
+        <div class="bg-white border border-slate-200 rounded-lg p-8 flex items-center justify-center min-h-[350px] md:min-h-[440px]">
           <img 
-            src=${thumbnail}
-            alt=${title}
+            src=${thumbnail} 
+            alt=${title} 
             class="max-h-96 max-w-full object-contain"
           >
         </div>
@@ -64,12 +63,12 @@ async function loadProductPage() {
         <div class="flex flex-col">
           <div>
             <span class="inline-block text-xs font-semibold text-teal-700 uppercase tracking-wider mb-2">
-              ${category}
+              ${category} 
             </span>
           </div>
 
           <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 leading-tight mb-3">
-            ${title}
+            ${title} 
           </h1>
 
           <div class="flex items-center gap-1 mb-4">
@@ -91,19 +90,19 @@ async function loadProductPage() {
               </svg>
             </div>
             <span class="ml-2 text-sm text-slate-500 font-medium">
-             ${rating} (${reviews.length} reviews)
+              ${rating}  (${reviews.length}  reviews)
             </span>
           </div>
 
           <div class="mb-6">
             <span class="text-2xl sm:text-3xl font-bold text-slate-900">
-              ₹${convertToINR(price)}
+              ₹${covertToINR(price)} 
             </span>
           </div>
 
           <div class="border-t border-b border-slate-200 py-6 mb-6">
             <p class="text-slate-600 text-base leading-relaxed">
-             ${description}
+              ${description}
             </p>
           </div>
 
@@ -162,22 +161,22 @@ async function loadProductPage() {
 
         </div>
       </div>`;
-
   productDetailContainer.innerHTML = div;
 
   const qtyValue = document.querySelector("#qty-value");
-   document.querySelector("qty-plus").addEventListener("click", (e) => {
+
+  document.querySelector("#qty-plus").addEventListener("click", (e) => {
     e.stopPropagation();
     qtyValue.textContent = Number(qtyValue.textContent) + 1;
-   });
+  });
 
-   document.querySelector("#qty-minus").addEventListener("click" , (e) => {
+  document.querySelector("#qty-minus").addEventListener("click", (e) => {
     e.stopPropagation();
-    if(Number(qtyValue.textContent) > 1){
+    if (Number(qtyValue.textContent) > 1) {
       qtyValue.textContent = Number(qtyValue.textContent) - 1;
     }
-   });
-    
+  });
+
   const addToWishlistBtn = document.querySelector("#add-to-wishlist-btn");
   const addToCartBtn = document.querySelector("#add-to-cart-btn");
   addToWishlistBtn.addEventListener("click", (e) => {
@@ -185,28 +184,27 @@ async function loadProductPage() {
     addToWishList(data);
   });
 
-   addToCartBtn.addEventListener("click" , (e) => {
+  addToCartBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    addToCart({...data, quantity: Number(qtyValue.textContent)});
-   });
-  }
+    addToCart({ ...data, quantity: Number(qtyValue.textContent) });
+  });
+}
 
-  function formatCategory(category){
-    return category.replace("-" , " ");
-  }
+function formatCategory(category) {
+  return category.replace("-", " ");
+}
 
-  function getItem(key){
-    return JSON.parse(localStorage.getItem(key)) || [];
-  }
+function getItem(key) {
+  return JSON.parse(localStorage.getItem(key)) || [];
+}
 
-  function setItem(key , data){
-   localStorage.setItem(key, JSON.stringify(data));
-  }
+function setItem(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
 
-  function convertToINR(price){
-    return (price * 96.29).toFixed(2);
-  }
-
+function covertToINR(price) {
+  return (price * 96.29).toFixed(2);
+}
 
 function renderProducts(products) {
   productsContainer.innerHTML = "";
@@ -215,39 +213,36 @@ function renderProducts(products) {
       let article = document.createElement("article");
       article.className =
         "bg-white border border-slate-200 rounded-lg p-4 flex flex-col justify-between hover:border-slate-300 hover:shadow-sm transition";
-
-      let card = `    
-          <div class="h-48 w-full flex items-center justify-center p-3 mb-4 bg-white">
-            <img src=${p.thumbnail}
-              alt=${p.title} class="max-h-full max-w-full object-contain" loading="lazy">
-          </div>
-          <div class="flex-grow flex flex-col">
-            <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
-              ${formatCategory(p.category)}
-            </span>
-            <h2 class="font-semibold text-slate-900 text-sm mb-2 line-clamp-2" title=${p.title}>
-            ${p.title}
-            </h2>
-            <div class="mt-auto pt-2">
-              <span class="text-lg font-bold text-slate-900">
-                ₹${convertToINR(p.price)}
-              </span>
+      let card = `
+            <div class="h-48 w-full flex items-center justify-center p-3 mb-4 bg-white">
+                <img src=${p.thumbnail}
+                alt=${p.title} class="max-h-full max-w-full object-contain" loading="lazy">
             </div>
-            <a href="product-details.html"
-              class="mt-4 block w-full text-center bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition">
-              View Details
-            </a>
-          </div>`;
-
+            <div class="flex-grow flex flex-col">
+                <span class="text-xs font-semibold text-teal-700 uppercase tracking-wider mb-1">
+                ${formatCategory(p.category)}
+                </span>
+                <h2 class="font-semibold text-slate-900 text-sm mb-2 line-clamp-2" title=${p.title}>
+                ${p.title}
+                </h2>
+                <div class="mt-auto pt-2">
+                <span class="text-lg font-bold text-slate-900">
+                    ₹${covertToINR(p.price)}
+                </span>
+                </div>
+                <a href="product-details.html?id=${p.id}"
+                class="mt-4 block w-full text-center bg-teal-700 hover:bg-teal-800 text-white text-sm font-medium py-2 px-4 rounded transition">
+                View Details
+                </a>
+            </div>
+        `;
       article.innerHTML = card;
       productsContainer.append(article);
     });
   } else {
-    productsContainer.innerHTML = "product not found";
+    productsContainer.innerHTML = "Product Not Found";
   }
 }
-
-
 
 function renderCategories(currentCategorySlug = "all") {
   categoryFilters.innerHTML = "";
@@ -260,7 +255,6 @@ function renderCategories(currentCategorySlug = "all") {
       button.className =
         "px-4 py-1.5 rounded-md text-sm font-medium bg-white text-slate-700 border border-slate-300 hover:bg-slate-100 capitalize transition";
     }
-
     button.type = "button";
     button.textContent = name;
     button.dataset.category = slug;
@@ -269,16 +263,17 @@ function renderCategories(currentCategorySlug = "all") {
   });
 }
 
-
-function loadWishListPage(){
+function loadWishListPage() {
   const wishlistContainer = document.querySelector("#wishlist-container");
-  if (!wishlistContainer){
+  if (!wishlistContainer) {
     return;
   }
 
-const wishlistProducts = getItem("wishlist");
-const outterDiv = document.createElement("div");
-outterDiv.className =   "bg-white border border-slate-200 rounded-lg divide-y divide-slate-200 overflow-hidden shadow-sm";
+  const wishlistProducts = getItem("wishlist");
+
+  const outterDiv = document.createElement("div");
+  outterDiv.className =
+    "bg-white border border-slate-200 rounded-lg divide-y divide-slate-200 overflow-hidden shadow-sm";
 
   if (!wishlistProducts.length) {
     wishlistContainer.innerHTML = `
@@ -305,9 +300,9 @@ outterDiv.className =   "bg-white border border-slate-200 rounded-lg divide-y di
 
   wishlistContainer.innerHTML = "";
   wishlistProducts.forEach((data) => {
-    const {id, title, thumbnail, price} = data;
+    const { id, title, thumbnail, price } = data;
     const div = document.createElement("div");
-     div.className =
+    div.className =
       "p-4 sm:p-6 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 justify-between";
 
     const card = ` <div class="flex items-center gap-4 w-full sm:w-auto flex-1 min-w-0">
@@ -322,7 +317,7 @@ outterDiv.className =   "bg-white border border-slate-200 rounded-lg divide-y di
                                 title=${title}>
                                 ${title}
                             </a>
-                            <p class="text-sm font-bold text-slate-900 mt-1">₹${convertToINR(price)}</p>
+                            <p class="text-sm font-bold text-slate-900 mt-1">₹${covertToINR(price)}</p>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 w-full sm:w-auto shrink-0 justify-end">
@@ -377,25 +372,22 @@ outterDiv.className =   "bg-white border border-slate-200 rounded-lg divide-y di
     }
   });
 }
-  
 
 function addToCart(data) {
   const cartProducts = getItem("cart");
-  if(cartProducts.length){
-    const isExist = cartProducts.find((p) => 
-      p.id === data.id
-    );
-    if(isExist){
+  if (cartProducts.length) {
+    const isExist = cartProducts.find((p) => p.id === data.id);
+    if (isExist) {
       const filterProducts = cartProducts.map((item) => {
         if (item.id === isExist.id) {
-          return{
+          return {
             ...item,
             quantity: Number(data.quantity) + Number(isExist.quantity),
           };
         }
         return item;
       });
-      setItem("cart" , filterProducts);
+      setItem("cart", filterProducts);
     } else {
       setItem("cart", [data, ...cartProducts]);
     }
@@ -484,7 +476,7 @@ function loadCart() {
                   title=${title}>
                  ${title}
                 </a>
-                <p class="text-xs text-slate-500 mt-1">₹${convertToINR(price)} each</p>
+                <p class="text-xs text-slate-500 mt-1">₹${covertToINR(price)} each</p>
               </div>
             </div>
             <div class="flex items-center justify-between sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto shrink-0">
@@ -508,7 +500,7 @@ function loadCart() {
                 </button>
               </div>
               <div class="w-20 text-right">
-                <span class="text-sm font-bold text-slate-900">₹${(Number(quantity) * convertToINR(price)).toFixed(2)}</span>
+                <span class="text-sm font-bold text-slate-900">₹${(Number(quantity) * covertToINR(price)).toFixed(2)}</span>
               </div>
               <button type="button"
                 class="cart-wishlist-btn text-slate-400 hover:text-teal-700 p-1.5 rounded transition"
@@ -564,7 +556,7 @@ function loadCart() {
 
           <div class="flex items-center justify-between text-base font-semibold text-slate-900 mb-6">
             <span>Total Amount</span>
-            <span class="text-xl font-bold text-teal-700">₹${convertToINR(totalPrice)}</span>
+            <span class="text-xl font-bold text-teal-700">₹${covertToINR(totalPrice)}</span>
           </div>
 
           <button type="button" id="checkout-btn"
@@ -610,17 +602,14 @@ function updateCartItemQuantity(id, quantity) {
     }
     return item;
   });
-
   setItem("cart", filterProducts);
   loadCart();
 }
 
-
 function init() {
   if (productsContainer) {
-     fetchProducts(API);
-     fetchCategories();
-
+    fetchProducts(API);
+    fetchCategories();
   }
 
   loadProductPage();
@@ -629,26 +618,26 @@ function init() {
   updateCartCount();
   loadCart();
 
-  if(categoryFilters){
-    categoryFilters.addEventListener("click" , (e) => {
+  if (categoryFilters) {
+    categoryFilters.addEventListener("click", (e) => {
       e.stopPropagation();
       const element = e.target;
-      if(element.type){
+      if (element.type) {
         const categorySlug = element.dataset.category;
-        const url = element.dataset.category;
+        const url = element.dataset.url;
         renderCategories(categorySlug);
         fetchProducts(url);
       }
     });
   }
 
-  if(searchInput){
-    searchInput.addEventListener("input" , (e) => {
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
       e.stopPropagation();
       let value = searchInput.value.trim();
-      if (value){
+      if (value) {
         fetchProducts(
-           `https://dummyjson.com/products/search?q=${value}&limit=0`,
+          `https://dummyjson.com/products/search?q=${value}&limit=0`,
         );
       }
     });
@@ -656,7 +645,3 @@ function init() {
 }
 
 init();
-
-
-  
-
